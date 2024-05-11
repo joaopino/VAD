@@ -1,0 +1,51 @@
+@font-face {
+    font-family: 'Manjari Bold';
+    src: url('/assets/fonts/Manjari-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Manjari Regular';
+    src: url('/assets/fonts/Manjari-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Manjari Thin';
+    src: url('/assets/fonts/Manjari-Thin.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Joti One';
+    src: url('/assets/fonts/JotiOne-Regular.ttf') format('truetype');
+}
+
+.init-header-food{
+    font-family: 'Joti One', sans-serif;
+    color: #EF80A2;
+    font-size: 196px;
+    line-height: 196px;
+    text-align: center;
+    padding-top: 10vh;
+    
+}
+.init-header-waste{
+    font-family: 'Joti One', sans-serif;
+    color: #4BB274;
+    font-size: 196px;
+    line-height: 196px;
+    text-align: center;
+    padding-bottom: 10vh;
+    
+
+
+}
+h1{
+    margin-block-start: 0em !important; 
+    margin-block-end: 0em !important;
+    line-height: 196px;
+    margin-top: 100px;
+    
+}
+
+body{
+    background-color: #FFF9FB;
+}
