@@ -27,26 +27,26 @@ layout = html.Div([
                style={'textAlign': 'center', 'fontSize': 20, 'font-family':'jsMas','margin-top': '20px'})
     ], style={'textAlign': 'center'}),
     
-    # html.Div([
-    #     html.Div([
-    #         dcc.Link(
-    #             f"{'World'}", href='/map'
-    #         ),
-    #     ], className='botton margin'),
-    #     html.Div([
-    #         dcc.Link(
-    #             f"{'Country'}", href='/grafic'
-    #         ),
-    #     ], className='botton margin'),
-    #     html.Div([
-    #         dcc.Link(
-    #             f"{'Year'}", href='/stats'
-    #         ),
-    #     ], className='botton margin'),
-    # ], className='botton-init'),
-    # html.Div([
-    #     html.Img(src='/assets/logo-init.png'),     
-    # ], className='init'),
+    html.Div([
+        html.Div([
+            dcc.Link(
+                f"{'World'}", href='/world'
+            ),
+        ], className='botton margin'),
+        html.Div([
+            dcc.Link(
+                f"{'Country'}", href='/country'
+            ),
+        ], className='botton margin'),
+        html.Div([
+            dcc.Link(
+                f"{'Year'}", href='/stats'
+            ),
+        ], className='botton margin'),
+    ], className='botton-init'),
+    html.Div([
+        html.Img(src='/assets/logo-init.png'),     
+    ], className='init'),
     
     #Counter Interval calculator
     dcc.Interval(
