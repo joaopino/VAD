@@ -7,9 +7,33 @@ import time
 import plotly.express as px
 
 
-df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
+df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualização Avançada de Dados/Projeto_final/VAD/datasets/dataset.csv")
 
 dash.register_page(__name__, path='/country') 
+
+navbar = html.Nav(
+    
+    className="navbar navbar-expand navbar-light bg-light",
+    children=[
+        html.A(className="navbar-anchor", href="#"),
+        
+        html.Span("Food", className="navbar-icon-Food"),
+        html.Span("Waste", className="navbar-icon-Waste"),
+        
+        dcc.Link(
+                f"{'Landing Page'}", href='/',className="navbar-body"
+            ),
+        dcc.Link(
+                f"{'World'}", href='/world',className="navbar-body"
+            ),
+        dcc.Link(
+                f"{'Country'}", href='/contry',className="navbar-body"
+            ),
+        dcc.Link(
+                f"{'Product'}", href='/product',className="navbar-body"
+            ),
+    ]
+)
 
 layout = html.Div(id='contry_page',style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
     dcc.Location(id='contry_page', refresh=False),
