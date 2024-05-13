@@ -12,7 +12,6 @@ df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualizaç
 dash.register_page(__name__, path='/country') 
 
 navbar = html.Nav(
-    
     className="navbar navbar-expand navbar-light bg-light",
     children=[
         html.A(className="navbar-anchor", href="#"),
@@ -35,54 +34,35 @@ navbar = html.Nav(
     ]
 )
 
-layout = html.Div(id='contry_page',style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
-    dcc.Location(id='contry_page', refresh=False),
+layout = html.Div(id='country', style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
+    navbar,
+    
+    dcc.Location(id='country', refresh=False),
     html.Div([
+        
+        html.H1("Country", style={'text-align': 'center', 'background-color': 'rgb(240, 240, 240)', 'color': '#EF80A2', 'height' : '3vw', 'line-height': '3vw'}),
+        
         html.Div([
-                dcc.Dropdown(
-                    id='order-selector_contry',
-                    options=[
-                        {'label': 'Crescent', 'value': 'crescente'},
-                        {'label': 'Decrescent', 'value': 'decrescente'},
-                    ],
-                    value='crescente',
-                    placeholder="Order",
-                    style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-                ),
-                dcc.Dropdown(
-                    id='size-selector_contry',
-                    options=[
-                        {'label': 'Top 10', 'value': 'top 10'},
-                        {'label': 'Top 100', 'value': 'top 100'},
-                        {'label': 'All', 'value': 'all'},
-                    ],
-                    value='top 10',
-                    placeholder="Size",
-                    style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-                ),  
-                dcc.Dropdown(
-                    id='stats-selector_contry',
-                    options=[
-                        {'label': 'Média', 'value': 'media'},
-                        {'label': 'Instâncias', 'value': 'instancias'},
-                    ],
-                    value='media',
-                    placeholder="Stats",
-                    style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-                ),
-                dcc.Dropdown(
-                    id='contry_selector',
-                    options=sorted([{'label': country, 'value': country} for country in df['country'].unique()], key=lambda x: x['label']),
-                    value=df['country'].unique()[0],
-                    placeholder="Country",
-                    searchable=True,
-                    style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-                ), 
-            ], style={'width': '100%', 'display': 'inline-block'}),
-
-            html.Div(id='graph-container2', style={'width': '100%', 'display': 'inline-block', 'padding': '0 20'})
-    ]),         
+            
+            dcc.Dropdown(
+                id='country-selector',
+                options=sorted([{'label': country, 'value': country} for country in df['country'].unique()], key=lambda x: x['label']),
+                value=df['country'].unique()[0],
+                placeholder="Country",
+                searchable=True,
+                style={'margin' : 'auto', 'background-color': '#EF80A2', 'color': 'black', 'width': '20vw', 'height' : '2.5vw', 'font-size': '1.2vw', 'border-radius': '12px'}
+            ),
+                    
+            dcc.Graph(id='waste-over-time')
+        ])
+    ]),
+    
+    html.Div(className='landingpage-footer'),
+    html.Div([
+        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    ],className="landingpage-footer-body")    
 ])
+
 
 def generate_graph_loss(df, country, is_mean):
     result = df[df['country'] == country].groupby('year')['loss_percentage'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['loss_percentage'].size().reset_index()
@@ -221,3 +201,12 @@ def update_graph2(order_value_country, size_value_country, stats_value_country, 
                     dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
                 ])
     
+@callback(
+    Output('waste-over-time', 'figure'),
+    [Input('country-selector', 'value')]
+)
+def update_graph(selected_country):
+    filtered_df = df[df['country'] == selected_country].groupby('year').mean().reset_index()
+    fig = px.line(filtered_df, x='year', y='country_product_prodution', title=f'Desperdício em {selected_country} ao Longo dos Anos')
+    fig.update_layout(xaxis_title='Ano', yaxis_title='Produção Média')
+    return fig

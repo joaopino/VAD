@@ -48,10 +48,10 @@ navbar = html.Nav(
 )
 
 
-layout = html.Div(id='world_page', style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
+layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
     navbar,
     
-    dcc.Location(id='url', refresh=False),
+    dcc.Location(id='world', refresh=False),
     html.Div([
         html.H1("World", style={'text-align': 'center', 'background-color': 'rgb(240, 240, 240)', 'color': '#EF80A2', 'height' : '3vw', 'line-height': '3vw'}),
         
