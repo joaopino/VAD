@@ -7,10 +7,7 @@
     font-family: 'Joti One';
     src: url('/assets/fonts/JotiOne-Regular.ttf') format('truetype');
 }
-@font-face {
-    font-family: 'Hepta Slab Bold';
-    src: url('/assets/fonts/HeptaSlab-Bold.ttf') format('truetype');
-}
+
 @font-face {
     font-family: 'MateSC-Regular';
     src: url('/assets/fonts/MateSC-Regular.ttf') format('truetype');
@@ -47,38 +44,6 @@
     font-size: 15;
     font-family: "Hepta Slab Bold", sans-serif ;
     margin-top: 0;
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 75px;
-    background-color: #FAD5E0;
-    width: 100%;
-    
-}
-
-.landingpage-navbar-world{
-    font-family: 'Hepta Slab Bold', sans-serif;
-    color: #000000;
-    font-size: 20px;
-    text-align: center;
-    flex-grow: 1;
-}
-.landingpage-navbar-country{
-    font-family: 'Hepta Slab Bold', sans-serif;
-    color: #000000;
-    font-size: 20px;
-    text-align: center;
-    flex-grow: 1;
-}
-.landingpage-navbar-product{
-    font-family: 'Hepta Slab Bold', sans-serif;
-    color: #000000;
-    font-size: 20px;
-    text-align: center;
-    flex-grow: 1;
 }
 
 .landingpage-footer {

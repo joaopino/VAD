@@ -7,7 +7,7 @@ import time
 import plotly.express as px
 
 
-df = pd.read_csv("/Users/joaopino/Downloads/acertar/datasets/dataset.csv")
+df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 
 dash.register_page(__name__, path='/country') 
 

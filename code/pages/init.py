@@ -13,18 +13,19 @@ navbar = html.Nav(
     children=[
         html.A(className="navbar-anchor", href="#"),
         dcc.Link(
-                f"{'World'}", href='/world',className="landingpage-navbar-world"
+                f"{'World'}", href='/world',className="landingpage-navbar-body"
             ),
         dcc.Link(
-                f"{'Country'}", href='/country',className="landingpage-navbar-country"
+                f"{'Country'}", href='/country',className="landingpage-navbar-body"
             ),
         dcc.Link(
-                f"{'Product'}", href='/product',className="landingpage-navbar-product"
+                f"{'Product'}", href='/product',className="landingpage-navbar-body"
             ),
     ]
 )
   
 layout = html.Div([
+    
     navbar,
     
      html.Div([
@@ -44,7 +45,7 @@ layout = html.Div([
     
     
     html.Div([
-        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis” class in Universidade de Coimbra"),
     ],className="landingpage-footer-body"),
     
     #Counter Interval calculator

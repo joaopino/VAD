@@ -7,7 +7,7 @@ import time
 import plotly.express as px
 
 
-df = pd.read_csv("/Users/joaopino/Downloads/acertar/datasets/dataset.csv")
+df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 
 dash.register_page(__name__, path='/world') 
 
@@ -68,7 +68,34 @@ for trace in fig_top_products_produced.data:
 fig_top_products_produced.update_layout(yaxis={'tickmode': 'array', 'tickvals': [], 'tickangle': -90, 'tickfont': {'color': 'rgb(245, 245, 220)'}},
                                         margin=dict(l=50, r=50, t=50, b=50))
     
+    
+    
+    
+navbar = html.Nav(
+    
+    className="navbar navbar-expand navbar-light bg-light",
+    children=[
+        html.A(className="navbar-anchor", href="#"),
+        
+        html.Span("Food", className="navbar-icon-Food"),
+        html.Span("Waste", className="navbar-icon-Waste"),
+        
+        dcc.Link(
+                f"{'Landing Page'}", href='/',className="navbar-body"
+            ),
+        dcc.Link(
+                f"{'Country'}", href='/map',className="navbar-body"
+            ),
+        dcc.Link(
+                f"{'Product'}", href='/map',className="navbar-body"
+            ),
+    ]
+)
+
+
 layout = html.Div(id='world_page', style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
+    navbar,
+    
     dcc.Location(id='url', refresh=False),
     html.Div([
         html.H1("World", style={'text-align': 'center', 'background-color': 'rgb(240, 240, 240)', 'color': 'green'}),
@@ -98,4 +125,10 @@ layout = html.Div(id='world_page', style={'background-color': 'rgb(240, 240, 240
             ], style={'width': '60%', 'height': '100%', 'border': '10px solid rgb(240, 240, 240)'})
         ], style={'display': 'flex', 'flex-direction': 'row'}),        
     ]),
+    
+    #Footer
+    html.Div(className='landingpage-footer'),
+    html.Div([
+        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    ],className="landingpage-footer-body"),
 ])
