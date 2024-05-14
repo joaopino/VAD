@@ -1,10 +1,16 @@
 import pandas as pd
 import dash
 import plotly.graph_objects as go
-from dash import dcc, html, callback
+import dash_ag_grid as dag
+from dash import dcc, html, callback, dash_table
 from dash.dependencies import Input, Output
 import time
 import plotly.express as px
+import dash_table.FormatTemplate as FormatTemplate
+
+# Define the format template for the loss percentage
+percentage_format = FormatTemplate.percentage(2)
+
 
 dash.register_page(__name__, path='/country') 
 
@@ -14,6 +20,32 @@ if option == 1:
 else:
     df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualização Avançada de Dados/Projeto_final/VAD/datasets/dataset.csv")
 
+def generate_world_waste_med_ranked(df):
+    filtered_df = df.dropna(subset=['loss_percentage']).groupby('country')['loss_percentage'].mean().reset_index()
+    filtered_df['rank'] = filtered_df['loss_percentage'].rank(ascending=True, method='min')
+    filtered_df.sort_values(by='rank', inplace=True)
+    
+    count = 0
+    last_rank = 0
+    for index, country in filtered_df.iterrows():
+        if last_rank == country["rank"]:
+            count += 1
+        else:
+            count = 0
+        filtered_df.at[index, "rank"] = country["rank"] + count
+        last_rank = country["rank"]
+        
+    return filtered_df
+
+def get_leaderboard_df(df,country):
+    country_loss_df = generate_world_waste_med_ranked(df)
+    country_rank = country_loss_df[country_loss_df['country'] == country]['rank'].iloc[0]
+    rank_leaderboard = country_loss_df[(country_loss_df['rank'] >= country_rank - 2) & (country_loss_df['rank'] <= country_rank + 2)]
+    rank_leaderboard['loss_percentage'] /= 100
+    return rank_leaderboard
+    
+
+united_states_leaderboard_df = get_leaderboard_df(df,"United States of America")
 
 navbar = html.Nav(
     
@@ -119,8 +151,14 @@ layout = html.Div(children=[
                 
         html.Div(className = "country-charts-wrapper",
         children=[
-            html.Div(className = "country-ranking-countainer",children=[ 
-                                                                        
+            html.Div(className = "country-ranking-container",children=[ 
+                dash_table.DataTable(
+                    columns=[{'name': 'Country', 'id': 'country'}, 
+                             {'name': 'Loss Percentage', 'id': 'loss_percentage','type': 'numeric', 'format': percentage_format}, 
+                             {'name': 'World Ranking', 'id': 'rank'}],
+                    data=united_states_leaderboard_df.to_dict("records"),
+                    id= "leaderboard-datatable",
+                ),
             ]),
             html.Div(className = "country-pieChart-container",children=[ 
                 dcc.Graph(id='country-pieChart', className='country-pieChart'),
@@ -134,7 +172,7 @@ layout = html.Div(children=[
                 ]),
                 html.Div(className = "country-waste-barGraph-container",children=[ 
                     dcc.Graph(id='country-waste-barGraph', className='country-waste-barGraph'),
-                ])
+                ]),
             ],
         ) ,
         ]  
@@ -213,3 +251,17 @@ def update_production_graph(country):
         )
     )
     return fig
+
+@callback(
+    dash.dependencies.Output('leaderboard-datatable', 'data'),
+    [dash.dependencies.Input('country-dropdown', 'value')]
+)
+def update_leaderboard(country):
+    rank_leaderboard = get_leaderboard_df(df, country)
+    # Convert DataFrame to list of dictionaries
+    leaderboard_data = rank_leaderboard.to_dict('records')
+    return leaderboard_data
+   
+    
+    
+    
