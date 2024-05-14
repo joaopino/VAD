@@ -20,9 +20,6 @@ else:
     df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualização Avançada de Dados/Projeto_final/VAD/datasets/dataset.csv")
 
 
-
-
-
 navbar = html.Nav(
     
     className="navbar navbar-expand navbar-light bg-light",
