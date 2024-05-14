@@ -1,66 +1,185 @@
-.product-graphs-wrapper{
+@font-face {
+    font-family: 'Hepta Slab Bold';
+    src: url('/assets/fonts/HeptaSlab-Bold.ttf') format('truetype');
+}
+
+.product-selecter-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.product-selecter-button-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FAD5E0;
+    border: 1px solid #000;
+    padding: 0.5rem;
+    margin-left: 22.5vw;
+    margin-right: 5vw;
+
+
+}
+
+.product-selecter-dropdown {
+    width: 17rem;
+}
+
+.product-filter-selecter-dropdown-one-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4BB274;
+    border: 1px solid #000;
+    padding: 0.5rem;
+    margin-right: 1vw;
+    margin-left: 20vw;
+
+}
+
+.product-filter-selecter-dropdown-two-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4BB274;
+    border: 1px solid #000;
+    padding: 0.5rem;
+    margin-right: 22.5vw;
+    margin-left: 1vw;
+}
+
+.product-filter-selecter-dropdown {
+    width: 8rem;
+}
+
+
+.product-filters-headers-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 2vh;
+    padding-bottom: 1vh;
+}
+
+.product-selecter-button-header {
+    font-family: 'Hepta Slab Bold', sans-serif;
+    color: #000000;
+    font-size: 20px;
+    text-align: flex;
+    flex-grow: 1;
+    line-height: 1.3;
+    margin-left: 20vw;
+
+}
+
+.filers-selecter-button-header {
+    font-family: 'Hepta Slab Bold', sans-serif;
+    color: #000000;
+    font-size: 20px;
+    text-align: flex;
+    line-height: 1.3;
+    margin-right: 27vw;
+}
+
+.product-slider-wraper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 0.5vh;
+
+}
+
+.product-slider {
+    display: flex;
+    width: flex;
+}
+
+.product-slider-header {
+    font-family: 'Hepta Slab Bold', sans-serif;
+    color: #000000;
+    font-size: 15px;
+    line-height: 1.3;
+    text-align: flex;
+    padding-left: 1vw;
+    padding-bottom: 0.5vh;
+    align-items: center;
+    order: -1;
+}
+
+.product-graphs-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 2vh;
 }
 
-.product-charts-wrapper{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    width: 35%; /* Set to occupy 30% of the space on the left */
-    margin-left: 3vw;
-    margin-right: 1.5vw;
-    
-}
-
-.product-time-analysis-wrapper{
-    width: 65%; /* Set to occupy 70% of the space on the right */
+.product-barGraph-wrapper {
+    width: 65%;
+    /* Set to occupy 70% of the space on the right */
     margin-right: 3vw;
     margin-left: 1.5vw;
 }
 
-.product-top-countries-container{
+.product-charts-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 35%;
+    /* Set to occupy 30% of the space on the left */
+    margin-left: 3vw;
+    margin-right: 1.5vw;
+}
+
+.product-product-barGraph-container {
     width: 99%;
     height: 35vh;
     border: 1px solid #000;
 }
 
-.product-pieChart-container{
+.product-waste-barGraph-container {
+    width: 99%;
+    height: 35vh;
+    border: 1px solid #000;
+    margin-top: 1vh;
+}
+
+.product-waste-barGraph {
+    width: 100%;
+    height: 100%;
+}
+
+.product-products-barGraph {
+    width: 100%;
+    height: 100%;
+}
+
+.product-pieChart-container {
     width: 99%;
     height: 30vh;
     border: 1px solid #000;
-    margin : 10px;
+    margin: 10px;
+
 }
 
-.product-waste-time-analysis-container{
+.product-ranking-container {
     width: 99%;
-    height: 35vh;
+    height: auto;
+    /* Set height to auto to adjust dynamically */
     border: 1px solid #000;
+    margin: 10px;
 
 }
 
-.product-production-time-analysis-container{
-    width: 99%;
-    height: 35vh;
-    border: 1px solid #000;
-    margin-top: 1vh; 
+.product-pieChart {
+    width: 100%;
+    height: 100%;
 }
 
-.product-production-time-analysis{
-    width: 100%;
-    height: 100%;
-}
-.product-waste-time-analysis{
-    width: 100%;
-    height: 100%;
-}
-.product-pieChart{
-    width: 100%;
-    height: 100%;
-}
-.product-top-countries{
+.leaderboard-datatable {
     width: 100%;
     height: 100%;
 }

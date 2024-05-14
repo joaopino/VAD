@@ -14,11 +14,32 @@ percentage_format = FormatTemplate.percentage(2)
 
 dash.register_page(__name__, path='/country') 
 
-option = 1
+option = 0
 if option == 1:
     df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 else:
     df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualização Avançada de Dados/Projeto_final/VAD/datasets/dataset.csv")
+
+navbar = html.Nav(
+    
+    className="navbar navbar-expand navbar-light bg-light",
+    children=[
+        html.A(className="navbar-anchor", href="#"),
+        
+        dcc.Link(html.Span("Food", className="navbar-icon-Food"), href='/'),
+        dcc.Link(html.Span("Waste", className="navbar-icon-Waste"), href='/'),
+
+        dcc.Link(
+                f"{'World'}", href='/world',className="landingpage-navbar-body"
+            ),
+        dcc.Link(
+                f"{'Country'}", href='/country',className="landingpage-navbar-body"
+            ),
+        dcc.Link(
+                f"{'Product'}", href='/product',className="landingpage-navbar-body"
+            ),
+    ]
+)
 
 def generate_world_waste_med_ranked(df):
     filtered_df = df.dropna(subset=['loss_percentage']).groupby('country')['loss_percentage'].mean().reset_index()
@@ -40,30 +61,12 @@ def generate_world_waste_med_ranked(df):
 def get_leaderboard_df(df,country):
     country_loss_df = generate_world_waste_med_ranked(df)
     country_rank = country_loss_df[country_loss_df['country'] == country]['rank'].iloc[0]
-    rank_leaderboard = country_loss_df[(country_loss_df['rank'] >= country_rank - 2) & (country_loss_df['rank'] <= country_rank + 2)]
+    rank_leaderboard = country_loss_df[(country_loss_df['rank'] >= country_rank - 3) & (country_loss_df['rank'] <= country_rank + 3)]
     rank_leaderboard['loss_percentage'] /= 100
     return rank_leaderboard
     
 
 united_states_leaderboard_df = get_leaderboard_df(df,"United States of America")
-
-navbar = html.Nav(
-    
-    className="navbar navbar-expand navbar-light bg-light",
-    children=[
-        html.A(className="navbar-anchor", href="#"),
-        
-        dcc.Link(html.Span("Food", className="navbar-icon-Food"), href='/'),
-        dcc.Link(html.Span("Waste", className="navbar-icon-Waste"), href='/'),
-
-        dcc.Link(
-                f"{'World'}", href='/world',className="navbar-body"
-            ),
-        dcc.Link(
-                f"{'Product'}", href='/product',className="navbar-body"
-            ),
-    ]
-)
 
 
 layout = html.Div(children=[
@@ -155,10 +158,10 @@ layout = html.Div(children=[
                     data=united_states_leaderboard_df.to_dict("records"),
                     id= "leaderboard-datatable",
                 ),
-            ]),
+            ], style={'height': '15.5vw', 'width': '35vw', 'marginBottom': '7px'}),
             html.Div(className = "country-pieChart-container",children=[ 
                 dcc.Graph(id='country-pieChart', className='country-pieChart'),
-            ]),
+            ], style={'height': '15.5vw', 'width': '35vw', 'marginTop': '7px'}),
         ],
     ) ,
         html.Div(className = "country-barGraph-wrapper",
@@ -174,12 +177,11 @@ layout = html.Div(children=[
         ]  
     ),
     #Footer
-    html.Div(className='landingpage-footer'),
-    html.Div([
-        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
-    ],className="landingpage-footer-body"),       
+    # html.Div(className='landingpage-footer'),
+    # html.Div([
+    #     html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    # ],className="landingpage-footer-body"),       
 ])
-
 
 
 def generate_graph_stage(df, country, is_mean):
@@ -318,6 +320,18 @@ def update_leaderboard(country,year,top,crescent):
     )
     return fig
    
+@callback(
+    Output('leaderboard-datatable', 'style_data_conditional'),
+    [Input('country-dropdown', 'value')]
+)
+def highlight_selected_country(selected_country):
+    return [
+        {
+            'if': {'filter_query': '{{country}} = "{}"'.format(selected_country)},
+            'backgroundColor': '#FAD5E0',  # Cor de realce
+            'color': 'black'  # Cor do texto na linha realçada
+        }
+    ]
     
     
     

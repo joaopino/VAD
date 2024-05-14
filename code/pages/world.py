@@ -6,14 +6,33 @@ from dash.dependencies import Input, Output
 import time
 import plotly.express as px
 
+dash.register_page(__name__, path='/world') 
 
-option = 1
+option = 0
 if option == 1:
     df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 else:
     df = pd.read_csv("C:/Users/narig/OneDrive/Ambiente de Trabalho/VAD - Visualização Avançada de Dados/Projeto_final/VAD/datasets/dataset.csv")
 
-dash.register_page(__name__, path='/world') 
+navbar = html.Nav(
+    
+    className="navbar navbar-expand navbar-light bg-light",
+    children=[
+        html.A(className="navbar-anchor", href="#"),
+        
+        dcc.Link(html.Span("Food", className="navbar-icon-Food"), href='/'),
+        dcc.Link(html.Span("Waste", className="navbar-icon-Waste"), href='/'),
+        dcc.Link(
+                f"{'World'}", href='/world',className="landingpage-navbar-body"
+            ),
+        dcc.Link(
+                f"{'Country'}", href='/country',className="landingpage-navbar-body"
+            ),
+        dcc.Link(
+                f"{'Product'}", href='/product',className="landingpage-navbar-body"
+            ),
+    ]
+)
 
 world_loss_media = df.groupby('country')['loss_percentage'].mean().reset_index()
 fig_world_loss_media = px.choropleth(world_loss_media, 
@@ -25,24 +44,6 @@ fig_world_loss_media = px.choropleth(world_loss_media,
                                      title='Média de Perda de Alimento por País')
 
 fig_world_loss_media.update_layout(margin=dict(l=50, r=50, t=50, b=50))
-    
-    
-navbar = html.Nav(
-    
-    className="navbar navbar-expand navbar-light bg-light",
-    children=[
-        html.A(className="navbar-anchor", href="#"),
-        
-        dcc.Link(html.Span("Food", className="navbar-icon-Food"), href='/'),
-        dcc.Link(html.Span("Waste", className="navbar-icon-Waste"), href='/'),
-        dcc.Link(
-                f"{'Country'}", href='/country',className="navbar-body"
-            ),
-        dcc.Link(
-                f"{'Product'}", href='/product',className="navbar-body"
-            ),
-    ]
-)
 
 
 layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', 'color': 'rgb(240, 240, 220)'}, children=[
