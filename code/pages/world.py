@@ -33,20 +33,13 @@ navbar = html.Nav(
     children=[
         html.A(className="navbar-anchor", href="#"),
         
-        html.Span("Food", className="navbar-icon-Food"),
-        html.Span("Waste", className="navbar-icon-Waste"),
-        
-        dcc.Link(
-                f"{'Landing Page'}", href='/',className="navbar-body"
-            ),
-        dcc.Link(
-                f"{'World'}", href='/world',className="navbar-body"
-            ),
+        dcc.Link(html.Span("Food", className="navbar-icon-Food"), href='/'),
+        dcc.Link(html.Span("Waste", className="navbar-icon-Waste"), href='/'),
         dcc.Link(
                 f"{'Country'}", href='/country',className="navbar-body"
             ),
         dcc.Link(
-                f"{'Product'}", href='/map',className="navbar-body"
+                f"{'Product'}", href='/product',className="navbar-body"
             ),
     ]
 )
