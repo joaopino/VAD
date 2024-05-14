@@ -101,11 +101,11 @@ layout = html.Div(children=[
                         id='country-top-selector',
                         className= "country-filter-selecter-dropdown",
                         options=[
-                            {'label': 'Top 5', 'value': 'top5'},
-                            {'label': 'Top 10', 'value': 'top10'},
-                            {'label': 'Top 100', 'value': 'top100'},
+                            {'label': 'Top 5', 'value': 5},
+                            {'label': 'Top 10', 'value': 10},
+                            {'label': 'Top 100', 'value': 100},
                         ],
-                        value='top5',
+                        value=5,
                         placeholder="Order",
                     ),
             ]
@@ -127,7 +127,6 @@ layout = html.Div(children=[
             ),
         ],
     ),
-    
     html.Div( className = "country-slider-wrapper",
         children = [
         
@@ -261,6 +260,66 @@ def update_leaderboard(country):
     # Convert DataFrame to list of dictionaries
     leaderboard_data = rank_leaderboard.to_dict('records')
     return leaderboard_data
+
+def get_top_chain_by_country(df, collumn, top, country, year,crescent):
+    filtered_df = df[ df['food_supply_stage'] != "Whole supply chain"]
+    filtered_df = filtered_df[ filtered_df['country'] == country]
+    
+    #1961 does not have any data, but is the default stating point on the slider value
+    
+    if year != 1961:
+        filtered_df = filtered_df[ filtered_df['year'] == year]
+    else:
+        food_loss_product = filtered_df.groupby('year')[collumn].sum().reset_index()    
+        
+    food_loss_product = filtered_df.groupby('food_supply_stage')[collumn].sum().reset_index()    
+    food_loss_product = food_loss_product[food_loss_product[collumn] != 0]
+    
+    food_loss_product['rank'] = food_loss_product[collumn].rank(ascending=crescent, method='min')
+    food_loss_product.sort_values(by='rank', inplace=True)
+    
+    count = 0
+    last_rank = 0
+    for index, country in food_loss_product.iterrows():
+        if last_rank == country["rank"]:
+            count += 1
+        else:
+            count = 0
+        food_loss_product.at[index, "rank"] = country["rank"] + count
+        last_rank = country["rank"]
+        
+    food_loss_product = food_loss_product.head(top)
+    sum_loss = food_loss_product[collumn].sum()
+    
+    food_loss_product['top_percentage'] = (food_loss_product[collumn] / sum_loss)
+
+    
+    return food_loss_product
+
+@callback(
+     dash.dependencies.Output('country-pieChart', 'figure'),
+    [dash.dependencies.Input('country-dropdown', 'value'),
+     dash.dependencies.Input('year-slider', 'value'),
+     dash.dependencies.Input('country-top-selector', 'value'),
+     dash.dependencies.Input('country-order-selector', 'value'),]
+)
+def update_leaderboard(country,year,top,crescent):
+    
+    top_df = get_top_chain_by_country(df,"loss_percentage",top,country,year,crescent!="crescent")
+    
+    fig = px.pie(top_df,
+                 values = top_df['loss_percentage'],
+                 names = top_df['food_supply_stage'], 
+                 hole=.3)
+    aux = "food loss in the chains of "
+    if(crescent == "crescent"):
+        title = "Biggest "+aux + country
+    else:
+        title = "Lowest "+aux + country 
+    fig.update_layout(
+    title=title
+    )
+    return fig
    
     
     
