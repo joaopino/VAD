@@ -59,7 +59,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding-top: 3vh;
+    padding-top: 2vh;
     padding-bottom: 1vh;
 }
 
@@ -80,5 +80,102 @@
     text-align: flex;
     line-height: 1.3;
     margin-right: 27vw;
+}
 
+.country-slider-wraper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding-bottom: 0.5vh;
+    
+}
+.country-slider{
+    display: flex;
+    width: flex;
+}
+.country-slider-header{
+    font-family: 'Hepta Slab Bold', sans-serif;
+    color: #000000;
+    font-size: 15px;
+    line-height: 1.3;
+    text-align: flex;
+    padding-left: 1vw;
+    padding-bottom: 0.5vh;
+    align-items: center; 
+    order: -1; 
+}
+
+.country-graphs-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 2vh;
+}
+
+.country-barGraph-wrapper{
+    flex-direction: column;
+    align-items: flex-end; /* Align items to the left */
+    width: 60%; /* Set to occupy 70% of the space on the right */
+    margin-right: 3vw;
+    margin-left: 1.5vw;
+}
+
+.country-charts-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left */
+    width: 40%; /* Set to occupy 30% of the space on the left */
+    margin-left: 3vw;
+    margin-right: 1.5vw;
+}
+
+.country-product-barGraph-container{
+    width: 100%;
+    height: 35vh;
+    border: 1px solid #000;
+    
+}
+
+.country-waste-barGraph-container{
+    width: 100%;
+    height: 35vh;
+    border: 1px solid #000;
+    margin-top: 1vh; 
+}
+.country-waste-barGraph{
+    width: 100%;
+    height: 100%;
+}
+.country-products-barGraph{
+    width: 100%;
+    height: 100%;
+}
+
+.country-pieChart-container{
+    width: 100%;
+    height: 30vh;
+    border: 1px solid #000;
+    
+    
+}
+.country-ranking-countainer{
+    width: 100%;
+    height: 20vh;
+    border: 1px solid #000;
+    margin-bottom: 5vh;
+    
+}
+
+.country-pieChart{
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.country-ranking{
+    width: 100%;
+    height: 100%;
 }

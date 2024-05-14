@@ -60,7 +60,7 @@ layout = html.Div(children=[
                         className= "country-selecter-dropdown",
                         id="country-dropdown",
                         options=[{'label': country, 'value': country} for country in sorted(df["country"].unique())],
-                        value=df['country'].iloc[0],
+                        value=sorted(df["country"].unique())[2],
                         clearable=False,
                     ),
             ]
@@ -71,13 +71,11 @@ layout = html.Div(children=[
                 dcc.Dropdown(
                         id='order-selector_contry',
                         className= "country-filter-selecter-dropdown",
-                        
                         options=[
                             {'label': 'Top 5', 'value': 'top5'},
                             {'label': 'Top 10', 'value': 'top10'},
                             {'label': 'Top 100', 'value': 'top100'},
                         ],
-                        
                         value='top5',
                         placeholder="Order",
                     ),
@@ -90,12 +88,10 @@ layout = html.Div(children=[
                         id='order-selector_contry',
                         className= "country-filter-selecter-dropdown",
                         options=[
-                            {'label': 'Top 5', 'value': 'top5'},
-                            {'label': 'Top 10', 'value': 'top10'},
-                            {'label': 'Top 100', 'value': 'top100'},
+                            {'label': 'Crescent', 'value': 'crescent'},
+                            {'label': 'Decrescent', 'value': 'decrescent'},
                         ],
-                        
-                        value='top5',
+                        value='crescent',
                         placeholder="Order",
                     ),
             ]
@@ -103,59 +99,49 @@ layout = html.Div(children=[
         ],
     ),
     
-    
-    
-    
-    
-    # html.Div([
+    html.Div( className = "country-slider-wrapper",
+        children = [
         
+        html.H1("Time Analysis", className="country-slider-header"),
         
-        
-    #     html.Div([
-    #             dcc.Dropdown(
-    #                 id='order-selector_contry',
-    #                 options=[
-    #                     {'label': 'Crescent', 'value': 'crescente'},
-    #                     {'label': 'Decrescent', 'value': 'decrescente'},
-    #                 ],
-    #                 value='crescente',
-    #                 placeholder="Order",
-    #                 style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-    #             ),
-    #             dcc.Dropdown(
-    #                 id='size-selector_contry',
-    #                 options=[
-    #                     {'label': 'Top 10', 'value': 'top 10'},
-    #                     {'label': 'Top 100', 'value': 'top 100'},
-    #                     {'label': 'All', 'value': 'all'},
-    #                 ],
-    #                 value='top 10',
-    #                 placeholder="Size",
-    #                 style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-    #             ),  
-    #             dcc.Dropdown(
-    #                 id='stats-selector_contry',
-    #                 options=[
-    #                     {'label': 'Média', 'value': 'media'},
-    #                     {'label': 'Instâncias', 'value': 'instancias'},
-    #                 ],
-    #                 value='media',
-    #                 placeholder="Stats",
-    #                 style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-    #             ),
-    #             dcc.Dropdown(
-    #                 id='contry_selector',
-    #                 options=sorted([{'label': country, 'value': country} for country in df['country'].unique()], key=lambda x: x['label']),
-    #                 value=df['country'].unique()[0],
-    #                 placeholder="Country",
-    #                 searchable=True,
-    #                 style={'width': '25%', 'display': 'inline-block', 'background-color': 'green'}
-    #             ), 
-    #         ], style={'width': '100%', 'display': 'inline-block'}),
-
-    #         html.Div(id='graph-container2', style={'width': '100%', 'display': 'inline-block', 'padding': '0 20'})
-    # ]),  
+        dcc.Slider(
+            id='year-slider',
+            className = "country-slider",
+            min=2000,
+            max=df['year'].max(),
+            value=df['year'].min(),
+            marks={str(year): str(year) for year in df['year'].unique()},
+            step=None
+        ),
+         
+        ],
+    ),
     
+    html.Div( className = "country-graphs-wrapper", 
+        children=[
+                
+        html.Div(className = "country-charts-wrapper",
+        children=[
+            html.Div(className = "country-ranking-countainer",children=[ 
+                                                                        
+            ]),
+            html.Div(className = "country-pieChart-container",children=[ 
+                #dcc.Graph(id='country-pieChart', className='country-pieChart'),
+            ]),
+        ],
+    ) ,
+        html.Div(className = "country-barGraph-wrapper",
+            children=[
+                html.Div(className = "country-product-barGraph-container",children=[ 
+                    dcc.Graph(id='country-products-barGraph', className='country-products-barGraph'),
+                ]),
+                html.Div(className = "country-waste-barGraph-container",children=[ 
+                    dcc.Graph(id='country-waste-barGraph', className='country-waste-barGraph'),
+                ])
+            ],
+        ) ,
+        ]  
+    ),
     #Footer
     html.Div(className='landingpage-footer'),
     html.Div([
