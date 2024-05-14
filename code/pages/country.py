@@ -11,7 +11,6 @@ import dash_table.FormatTemplate as FormatTemplate
 # Define the format template for the loss percentage
 percentage_format = FormatTemplate.percentage(2)
 
-
 dash.register_page(__name__, path='/country') 
 
 option = 0

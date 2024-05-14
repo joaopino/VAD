@@ -2,9 +2,12 @@ import pandas as pd
 import dash
 import plotly.graph_objects as go
 from dash import dcc, html, callback
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import time
 import plotly.express as px
+
+from dash.exceptions import PreventUpdate
+from dash import callback_context
 
 dash.register_page(__name__, path='/world') 
 
@@ -53,6 +56,9 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
     html.Div([
         html.H1("World", style={'text-align': 'center', 'background-color': 'rgb(240, 240, 240)', 'color': '#EF80A2', 'height' : '3vw', 'line-height': '3vw'}),
         
+        html.Button('Start', id='start-button', n_clicks=0, style={'width': '100px', 'height': '30px', 'background-color': '#EF80A2'}),
+        dcc.Interval(id='auto-stepper', interval=1*1000, disabled=True),  # Desabilitado inicialmente
+        
         dcc.Slider(
             id='year-slider',
             min=2000,
@@ -66,16 +72,18 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
             
             html.Div([
                 
-                dcc.Dropdown(
-                    id='order-selector-product',
-                    options=[
-                        {'label': 'Crescente', 'value': 'crescente'},
-                        {'label': 'Decrescente', 'value': 'decrescente'},
-                    ],
-                    value='crescente',
-                    placeholder="Order",
-                    style={'background-color': '#EF80A2', 'color': 'black', 'width': '10vw', 'height' : '2.5vw', 'font-size': '1.2vw', 'border-radius': '12px'}
-                ),
+                html.Div([
+                    dcc.Dropdown(
+                        id='order-selector-product',
+                        options=[
+                            {'label': 'Top 5', 'value': 'crescente'},
+                            {'label': 'Bottom 5', 'value': 'decrescente'},
+                        ],
+                        value='crescente',
+                        placeholder="Order",
+                        style={'background-color': '#EF80A2', 'color': 'black', 'width': '10vw', 'height' : '2.5vw', 'font-size': '1.2vw', 'border-radius': '12px'}
+                    ),
+                ], style={'margin-left': '0.5vw'}),
                     
                 html.Div([
                     dcc.Graph(id='top-products-wasted', style={'width': '38vw', 'height': '29vh', 'border': '10px solid rgb(240, 240, 240)'})
@@ -101,7 +109,8 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
 
 @callback(
     Output('world-map', 'figure'),
-    [Input('year-slider', 'value')]
+    [Input('year-slider', 'value')],
+    allow_duplicate=True
 )
 def update_map(selected_year):
     # Filtrar os dados pelo ano selecionado e anos posteriores a 2000
@@ -133,7 +142,8 @@ def update_map(selected_year):
     [Output('top-products-wasted', 'figure'),
      Output('top-products-produced', 'figure')],
     [Input('year-slider', 'value'),
-     Input('order-selector-product', 'value')]  # Adicione este Input para capturar a seleção do dropdown
+     Input('order-selector-product', 'value')],  # Adicione este Input para capturar a seleção do dropdown
+    allow_duplicate=True
 )
 def update_bar_charts(selected_year, order):
     # Filtrar os dados pelo ano selecionado e anos posteriores a 2000
@@ -141,8 +151,8 @@ def update_bar_charts(selected_year, order):
     
     # Calcula as métricas para os gráficos de barras
     if order == 'crescente':
-        top_products_wasted = df_year.groupby('product')['loss_percentage'].mean().nlargest(10).sort_values(ascending=True)
-        top_products_produced = df_year.groupby('product')['country_product_prodution'].mean().nlargest(10).sort_values(ascending=True)
+        top_products_wasted = df_year.groupby('product')['loss_percentage'].mean().nlargest(5).sort_values(ascending=True)
+        top_products_produced = df_year.groupby('product')['country_product_prodution'].mean().nlargest(5).sort_values(ascending=True)
         
         fig_top_products_wasted = px.bar(top_products_wasted, y=top_products_wasted.index, x='loss_percentage', 
                                     orientation='h',
@@ -188,8 +198,8 @@ def update_bar_charts(selected_year, order):
         fig_top_products_produced.update_layout(yaxis={'tickmode': 'array', 'tickvals': [], 'tickangle': -90, 'tickfont': {'color': 'rgb(245, 245, 220)'}},
                                         margin=dict(l=50, r=50, t=50, b=50))
     else:
-        top_products_wasted = df_year.groupby('product')['loss_percentage'].mean().nsmallest(10).sort_values(ascending=False)
-        top_products_produced = df_year.groupby('product')['country_product_prodution'].mean().nsmallest(10).sort_values(ascending=False)
+        top_products_wasted = df_year.groupby('product')['loss_percentage'].mean().nsmallest(5).sort_values(ascending=False)
+        top_products_produced = df_year.groupby('product')['country_product_prodution'].mean().nsmallest(5).sort_values(ascending=False)
         
         fig_top_products_wasted = px.bar(top_products_wasted, y=top_products_wasted.index, x='loss_percentage', 
                             orientation='h',
@@ -236,3 +246,32 @@ def update_bar_charts(selected_year, order):
                                         margin=dict(l=50, r=50, t=50, b=50))
 
     return fig_top_products_wasted, fig_top_products_produced
+
+@callback(
+    [Output('year-slider', 'value'),
+     Output('auto-stepper', 'disabled')],
+    [Input('start-button', 'n_clicks'),
+     Input('auto-stepper', 'n_intervals')],
+    [State('year-slider', 'value'),
+     State('auto-stepper', 'disabled')]
+)
+def manage_slider(n_clicks, n_intervals, year_value, interval_disabled):
+    ctx = callback_context
+
+    # Determinar qual input disparou o callback (start-button ou auto-stepper)
+    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if trigger_id == 'start-button':
+        # Lógica para iniciar ou parar
+        if n_clicks % 2 == 1:  # Se é ímpar, o usuário quer iniciar
+            return (max(year_value, 2000) if year_value < df['year'].max() else 2000, False)
+        else:  # Se é par, o usuário quer parar
+            return (year_value, True)
+
+    elif trigger_id == 'auto-stepper':
+        # Lógica de avanço automático do ano
+        if not interval_disabled:
+            new_year = year_value + 1 if year_value < df['year'].max() else 2000
+            return (new_year, interval_disabled)
+
+    return (year_value, interval_disabled)

@@ -11,7 +11,7 @@ import dash_table.FormatTemplate as FormatTemplate
 # Define the format template for the loss percentage
 percentage_format = FormatTemplate.percentage(2)
 
-dash.register_page(__name__, path='/product') 
+dash.register_page(__name__, path='/product')
 
 option = 0
 if option == 1:
@@ -21,7 +21,6 @@ else:
 
 
 navbar = html.Nav(
-    
     className="navbar navbar-expand navbar-light bg-light",
     children=[
         html.A(className="navbar-anchor", href="#"),
