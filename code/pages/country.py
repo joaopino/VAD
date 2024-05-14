@@ -76,7 +76,7 @@ layout = html.Div(children=[
     
     html.Div(className="country-filters-headers-wrapper",
         children=[
-            html.H1("Select the product for Analysis",className="country-selecter-button-header"),
+            html.H1("Select the country for Analysis",className="country-selecter-button-header"),
             html.H1("Filters",className="filers-selecter-button-header"),            
         ]         
     ),

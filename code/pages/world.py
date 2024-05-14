@@ -63,7 +63,7 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
             id='year-slider',
             min=2000,
             max=df['year'].max(),
-            value=df['year'].min(),
+            value=2000,
             marks={str(year): str(year) for year in df['year'].unique()},
             step=None
         ),
