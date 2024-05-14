@@ -49,9 +49,6 @@ layout = html.Div(children=[
         ]         
     ),
     
-    
-    
-    
     html.Div( className="country-selecter-wrapper",
         children=[
             html.Div(className="country-selecter-button-box",
@@ -60,7 +57,7 @@ layout = html.Div(children=[
                         className= "country-selecter-dropdown",
                         id="country-dropdown",
                         options=[{'label': country, 'value': country} for country in sorted(df["country"].unique())],
-                        value=sorted(df["country"].unique())[2],
+                        value="United States of America",
                         clearable=False,
                     ),
             ]
@@ -69,7 +66,7 @@ layout = html.Div(children=[
             html.Div(className="country-filter-selecter-dropdown-one-box",
             children=[            
                 dcc.Dropdown(
-                        id='order-selector_contry',
+                        id='country-top-selector',
                         className= "country-filter-selecter-dropdown",
                         options=[
                             {'label': 'Top 5', 'value': 'top5'},
@@ -85,7 +82,7 @@ layout = html.Div(children=[
             html.Div(className="country-filter-selecter-dropdown-two-box",
             children=[            
                 dcc.Dropdown(
-                        id='order-selector_contry',
+                        id='country-order-selector',
                         className= "country-filter-selecter-dropdown",
                         options=[
                             {'label': 'Crescent', 'value': 'crescent'},
@@ -126,7 +123,7 @@ layout = html.Div(children=[
                                                                         
             ]),
             html.Div(className = "country-pieChart-container",children=[ 
-                #dcc.Graph(id='country-pieChart', className='country-pieChart'),
+                dcc.Graph(id='country-pieChart', className='country-pieChart'),
             ]),
         ],
     ) ,
@@ -149,143 +146,70 @@ layout = html.Div(children=[
     ],className="landingpage-footer-body"),       
 ])
 
-def generate_graph_loss(df, country, is_mean):
-    result = df[df['country'] == country].groupby('year')['loss_percentage'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['loss_percentage'].size().reset_index()
-    return px.bar(result, x='year', y='loss_percentage', title="Top 10 Anos com Menor Perda de Alimento no País")
 
-def generate_graph_production(df, country, is_mean):
-    result = df[df['country'] == country].groupby('year')['country_product_prodution'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['country_product_prodution'].size().reset_index()
-    return px.bar(result, x='year', y='country_product_prodution', title="Top 10 Anos com Menor Produção de Alimento no País")
 
 def generate_graph_stage(df, country, is_mean):
     result = df[df['country'] == country].dropna(subset=['food_supply_stage']).groupby('year')['loss_percentage'].mean().reset_index() if is_mean else df[df['country'] == country].dropna(subset=['food_supply_stage']).groupby('year')['loss_percentage'].size().reset_index()
     return px.bar(result, x='year', y='loss_percentage', title="Top 10 Anos com Menor Estágio de Fornecimento de Alimento no País")
 
+def generate_waste_dataframe_by_country(df, country, is_mean):
+    result = df[df['country'] == country].groupby('year')['loss_percentage'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['loss_percentage'].size().reset_index()
+    return result
 @callback(
-    dash.dependencies.Output('graph-container2', 'children'),
-    [dash.dependencies.Input('order-selector_contry', 'value'),
-     dash.dependencies.Input('size-selector_contry', 'value'),
-     dash.dependencies.Input('stats-selector_contry', 'value'),
-     dash.dependencies.Input('contry_selector', 'value')]
+    dash.dependencies.Output('country-waste-barGraph', 'figure'),
+    [dash.dependencies.Input('country-dropdown', 'value'),]
 )
-def update_graph2(order_value_country, size_value_country, stats_value_country, contry_selector):
-    if order_value_country == 'crescente':
-        if size_value_country == 'top 10':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-        elif size_value_country == 'top 100':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-        elif size_value_country == 'all':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-    elif order_value_country == 'decrescente':
-        if size_value_country == 'top 10':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-        elif size_value_country == 'top 100':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-        elif size_value_country == 'all':
-            if stats_value_country == 'media':
-                result_loss = generate_graph_loss(df, contry_selector, True)
-                result_production = generate_graph_production(df, contry_selector, True)
-                result_stage = generate_graph_stage(df, contry_selector, True)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
-            elif stats_value_country == 'instancias':
-                result_loss = generate_graph_loss(df, contry_selector, False)
-                result_production = generate_graph_production(df, contry_selector, False)
-                result_stage = generate_graph_stage(df, contry_selector, False)
-                return html.Div([
-                    dcc.Graph(figure=result_loss, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_production, style={'width': '33%', 'display': 'inline-block'}),
-                    dcc.Graph(figure=result_stage, style={'width': '33%', 'display': 'inline-block'})
-                ])
+def update_waste_graph(country):
+    #Country -> Name of the country
+    #top_flag -> Flag that can be "top5","top10","top100"
+    #order -> Flag tha can be "crescent"
     
+    filtered_df = generate_waste_dataframe_by_country(df,country,True)
+    filtered_df = filtered_df[(filtered_df['year'] >= 2000)]
     
+    fig = go.Figure(
+        data=[go.Scatter(x=filtered_df['year'], y=filtered_df['loss_percentage'], mode="lines+markers", marker_color='#4BB274')],
+        layout=dict(
+            margin=dict(b=50),
+            title=dict(text=f"Time Analysis of Wasted Food in {country}"),
+            title_font_color='black',
+            xaxis_title='Year',
+            yaxis_title='Percentage of food wasted',
+            plot_bgcolor='#FFF9FB',
+            paper_bgcolor='#FFF9FB',
+            xaxis=dict(gridcolor='rgb(220, 220, 220)'), 
+            yaxis=dict(gridcolor='rgb(220, 220, 220)'),
+        )
+    )
+    return fig
 
-
+def generate_production_dataframe_by_country(df, country, is_mean):
+    result = df[df['country'] == country].groupby('year')['country_product_prodution'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['country_product_prodution'].size().reset_index()
+    return result
+@callback(
+    dash.dependencies.Output('country-products-barGraph', 'figure'),
+    [dash.dependencies.Input('country-dropdown', 'value'),]
+)
+def update_production_graph(country):
+    #Country -> Name of the country
+    #top_flag -> Flag that can be "top5","top10","top100"
+    #order -> Flag tha can be "crescent"
+    
+    filtered_df = generate_production_dataframe_by_country(df,country,True)
+    filtered_df = filtered_df[(filtered_df['year'] >= 2000)]
+    
+    fig = go.Figure(
+        data=[go.Scatter(x=filtered_df['year'], y=filtered_df['country_product_prodution'], mode="lines+markers", marker_color='#4BB274')],
+        layout=dict(
+            margin=dict(b=50),
+            title=dict(text=f"Time Analysis of Food Production in {country}"),
+            title_font_color='black',
+            xaxis_title='Year',
+            yaxis_title='Food Produced',
+            plot_bgcolor='#FFF9FB',
+            paper_bgcolor='#FFF9FB',
+            xaxis=dict(gridcolor='rgb(220, 220, 220)'), 
+            yaxis=dict(gridcolor='rgb(220, 220, 220)'),
+        )
+    )
+    return fig

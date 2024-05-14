@@ -115,9 +115,7 @@
 }
 
 .country-barGraph-wrapper{
-    flex-direction: column;
-    align-items: flex-end; /* Align items to the left */
-    width: 60%; /* Set to occupy 70% of the space on the right */
+    width: 65%; /* Set to occupy 70% of the space on the right */
     margin-right: 3vw;
     margin-left: 1.5vw;
 }
@@ -125,21 +123,19 @@
 .country-charts-wrapper{
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align items to the left */
-    width: 40%; /* Set to occupy 30% of the space on the left */
+    width: 35%; /* Set to occupy 30% of the space on the left */
     margin-left: 3vw;
     margin-right: 1.5vw;
 }
 
 .country-product-barGraph-container{
-    width: 100%;
+    width: 99%;
     height: 35vh;
     border: 1px solid #000;
-    
 }
 
 .country-waste-barGraph-container{
-    width: 100%;
+    width: 99%;
     height: 35vh;
     border: 1px solid #000;
     margin-top: 1vh; 
