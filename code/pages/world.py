@@ -101,10 +101,10 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
         ], style={'display': 'flex', 'flex-direction': 'row'}),        
     ]),
     
-    html.Div(className='landingpage-footer'),
-        html.Div([
-            html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
-        ],className="landingpage-footer-body"),
+    # html.Div(className='landingpage-footer'),
+    #     html.Div([
+    #         html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    #     ],className="landingpage-footer-body"),
 ])
 
 @callback(
@@ -253,7 +253,8 @@ def update_bar_charts(selected_year, order):
     [Input('start-button', 'n_clicks'),
      Input('auto-stepper', 'n_intervals')],
     [State('year-slider', 'value'),
-     State('auto-stepper', 'disabled')]
+     State('auto-stepper', 'disabled')],
+    allow_duplicate=True  # Permitir múltiplos callbacks modificando a mesma saída
 )
 def manage_slider(n_clicks, n_intervals, year_value, interval_disabled):
     ctx = callback_context
@@ -275,3 +276,4 @@ def manage_slider(n_clicks, n_intervals, year_value, interval_disabled):
             return (new_year, interval_disabled)
 
     return (year_value, interval_disabled)
+

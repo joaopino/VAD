@@ -3,10 +3,13 @@ import dash
 import plotly.graph_objects as go
 import dash_ag_grid as dag
 from dash import dcc, html, callback, dash_table
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import time
 import plotly.express as px
 import dash_table.FormatTemplate as FormatTemplate
+
+from dash.exceptions import PreventUpdate
+from dash import callback_context
 
 # Define the format template for the loss percentage
 percentage_format = FormatTemplate.percentage(2)
@@ -131,9 +134,11 @@ layout = html.Div(children=[
         
         html.H1("Time Analysis", className="country-slider-header"),
         
+        html.Button('Start', id='start-button', n_clicks=0, style={'width': '100px', 'height': '30px', 'background-color': '#EF80A2'}),
+        dcc.Interval(id='country-auto-stepper', interval=1*1000, disabled=True),  # Desabilitado inicialmente
+        
         dcc.Slider(
-            id='year-slider',
-            className = "country-slider",
+            id='country-year-slider',
             min=2000,
             max=df['year'].max(),
             value=df['year'].min(),
@@ -297,9 +302,10 @@ def get_top_chain_by_country(df, collumn, top, country, year,crescent):
 @callback(
      dash.dependencies.Output('country-pieChart', 'figure'),
     [dash.dependencies.Input('country-dropdown', 'value'),
-     dash.dependencies.Input('year-slider', 'value'),
+     dash.dependencies.Input('country-year-slider', 'value'),
      dash.dependencies.Input('country-top-selector', 'value'),
-     dash.dependencies.Input('country-order-selector', 'value'),]
+     dash.dependencies.Input('country-order-selector', 'value'),],
+    allow_duplicate=True  # Permitir múltiplos callbacks modificando a mesma saída
 )
 def update_leaderboard(country,year,top,crescent):
     
@@ -332,5 +338,28 @@ def highlight_selected_country(selected_country):
         }
     ]
     
-    
-    
+@callback(
+    [Output('country-year-slider', 'value'),
+     Output('country-auto-stepper', 'disabled')],
+    [Input('start-button', 'n_clicks'),
+     Input('country-auto-stepper', 'n_intervals')],
+    [State('country-year-slider', 'value'),
+     State('country-auto-stepper', 'disabled')],
+    allow_duplicate=True  # Permitir múltiplos callbacks modificando a mesma saída
+)
+def manage_slider(n_clicks, n_intervals, year_value, interval_disabled):
+    ctx = callback_context
+    trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    if trigger_id == 'start-button':
+        if n_clicks % 2 == 1:  # Se é ímpar, o usuário quer iniciar        
+            return (max(year_value, 2000) if year_value < df['year'].max() else 2000, False)
+        else:
+            return (year_value, True)
+        
+    elif trigger_id == 'country-auto-stepper':
+        if not interval_disabled:
+            new_year = year_value + 1 if year_value < df['year'].max() else 2000
+            return (new_year, interval_disabled)
+        
+    return (year_value, interval_disabled)

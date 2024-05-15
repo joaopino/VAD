@@ -1,16 +1,3 @@
-
-Navbar ser constante -> Done 
-
-World
-
-Graficos pagina World não se percebe nada -> Done
-Play na serie temporal
-
-Contry 
-
-Realçar o pais selecionado no top -> Done
 Nas graficos de linhas realçar o ano 
-Alinhar os graficos -> Done
-
 E repensar o filtro da pagina World
 Desenvolver um pouco mais o grafico de fases de desperdicio se tivermos tempo, de modo a que seja possivel ver a sua variação ao longo do tempo mas algo mais complexo 
