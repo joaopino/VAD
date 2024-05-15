@@ -195,11 +195,13 @@ def generate_graph_stage(df, country, is_mean):
 def generate_waste_dataframe_by_country(df, country, is_mean):
     result = df[df['country'] == country].groupby('year')['loss_percentage'].mean().reset_index() if is_mean else df[df['country'] == country].groupby('year')['loss_percentage'].size().reset_index()
     return result
+
 @callback(
     dash.dependencies.Output('country-waste-barGraph', 'figure'),
-    [dash.dependencies.Input('country-dropdown', 'value'),]
+    [dash.dependencies.Input('country-dropdown', 'value'),
+     dash.dependencies.Input('country-year-slider', 'value')]
 )
-def update_waste_graph(country):
+def update_waste_graph(country, selected_year):
     #Country -> Name of the country
     #top_flag -> Flag that can be "top5","top10","top100"
     #order -> Flag tha can be "crescent"
@@ -221,6 +223,9 @@ def update_waste_graph(country):
             yaxis=dict(gridcolor='rgb(220, 220, 220)'),
         )
     )
+    
+    fig.add_vline(x=selected_year, line_dash="dash", line_color="red")
+    
     return fig
 
 def generate_production_dataframe_by_country(df, country, is_mean):
@@ -228,9 +233,10 @@ def generate_production_dataframe_by_country(df, country, is_mean):
     return result
 @callback(
     dash.dependencies.Output('country-products-barGraph', 'figure'),
-    [dash.dependencies.Input('country-dropdown', 'value'),]
+    [dash.dependencies.Input('country-dropdown', 'value'),
+     dash.dependencies.Input('country-year-slider', 'value')]
 )
-def update_production_graph(country):
+def update_production_graph(country, selected_year):
     #Country -> Name of the country
     #top_flag -> Flag that can be "top5","top10","top100"
     #order -> Flag tha can be "crescent"
@@ -252,6 +258,9 @@ def update_production_graph(country):
             yaxis=dict(gridcolor='rgb(220, 220, 220)'),
         )
     )
+    
+    fig.add_vline(x=selected_year, line_dash="dash", line_color="red")
+    
     return fig
 
 @callback(
