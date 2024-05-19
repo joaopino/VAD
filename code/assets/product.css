@@ -1,8 +1,18 @@
+@font-face {
+    font-family: 'Hepta Slab Bold';
+    src: url('/assets/fonts/HeptaSlab-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Hepta Slab Regular';
+    src: url('/assets/fonts/HeptaSlab-Regular.ttf') format('truetype');
+}
+
 .product-graphs-wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 2vh;
+    margin-top: 1vh;
 }
 
 .product-charts-wrapper {
@@ -10,47 +20,41 @@
     align-items: center;
     flex-direction: column;
     width: 35%;
-    /* Set to occupy 30% of the space on the left */
     margin-left: 3vw;
     margin-right: 1.5vw;
-
 }
 
 .product-time-analysis-wrapper {
     width: 65%;
-    /* Set to occupy 70% of the space on the right */
     margin-right: 3vw;
     margin-left: 1.5vw;
+}
+
+.product-waste-time-analysis-container {
+    width: 99%;
+    height: 34vh;
+    border: 1px solid #000;
+}
+
+.product-production-time-analysis-container {
+    width: 99%;
+    height: 34vh;
+    border: 1px solid #000;
+    margin-top: 1vh;
+}
+
+.product-pieChart-container {
+    width: 99%;
+    height: 4vh;
+    border: 1px solid #000;
+    margin: 10px;
 }
 
 .product-top-countries-container {
     width: 99%;
     height: 40vh;
-    /* Ajuste a altura conforme necessário */
     border: 1px solid #000;
     overflow-y: auto;
-    /* Adicione uma barra de rolagem vertical se necessário */
-}
-
-.product-pieChart-container {
-    width: 99%;
-    height: 30vh;
-    border: 1px solid #000;
-    margin: 10px;
-}
-
-.product-waste-time-analysis-container {
-    width: 99%;
-    height: 35vh;
-    border: 1px solid #000;
-
-}
-
-.product-production-time-analysis-container {
-    width: 99%;
-    height: 35vh;
-    border: 1px solid #000;
-    margin-top: 1vh;
 }
 
 .product-production-time-analysis {

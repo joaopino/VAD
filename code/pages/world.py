@@ -11,7 +11,7 @@ from dash import callback_context
 
 dash.register_page(__name__, path='/world') 
 
-option = 0
+option = 1
 if option == 1:
     df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 else:
@@ -102,9 +102,9 @@ layout = html.Div(id='world', style={'background-color': 'rgb(240, 240, 240)', '
     ]),
     
     # html.Div(className='landingpage-footer'),
-    #     html.Div([
-    #         html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
-    #     ],className="landingpage-footer-body"),
+        html.Div([
+            html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+        ],className="landingpage-footer-body"),
 ])
 
 @callback(

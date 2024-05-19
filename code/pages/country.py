@@ -16,7 +16,7 @@ percentage_format = FormatTemplate.percentage(2)
 
 dash.register_page(__name__, path='/country') 
 
-option = 0
+option = 1
 if option == 1:
     df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 else:
@@ -72,36 +72,37 @@ united_states_leaderboard_df = get_leaderboard_df(df,"United States of America")
 
 
 layout = html.Div(children=[
-    dcc.Location(id='contry_page', refresh=False),
+    dcc.Location(id='country_page', refresh=False),
     
     navbar,
     
-    html.Div(className="country-filters-headers-wrapper",
+    html.Div(className="filters-body-wrapper",
         children=[
-            html.H1("Select the country for Analysis",className="country-selecter-button-header"),
-            html.H1("Filters",className="filers-selecter-button-header"),            
+            html.H1("Select the country for Analysis",className="filters-selector-header"),
+            html.H1("Filters",className="filters-filters-header"),            
         ]         
     ),
     
-    html.Div( className="country-selecter-wrapper",
+    html.Div( className="filters-bottons-wrapper",
         children=[
-            html.Div(className="country-selecter-button-box",
+            html.Div(className="filters-dropdown-selector-box",
             children=[            
                 dcc.Dropdown(
-                        className= "country-selecter-dropdown",
+                        className= "filters-selecter-dropdown",
                         id="country-dropdown",
                         options=[{'label': country, 'value': country} for country in sorted(df["country"].unique())],
                         value="United States of America",
                         clearable=False,
+                        style={'backgroundColor': '#FAD5E0', 'border': 'none',"fontFamily":"Hepta Slab Bold, sans-serif" ,"fontSize": 15,"textAlign":"center" }
                     ),
             ]
             ),
              
-            html.Div(className="country-filter-selecter-dropdown-one-box",
+            html.Div(className="filters-dropdown-top-selecter-box",
             children=[            
                 dcc.Dropdown(
                         id='country-top-selector',
-                        className= "country-filter-selecter-dropdown",
+                        className= "filters-dropdown-selector",
                         options=[
                             {'label': 'Top 5', 'value': 5},
                             {'label': 'Top 10', 'value': 10},
@@ -109,42 +110,46 @@ layout = html.Div(children=[
                         ],
                         value=5,
                         placeholder="Order",
+                        style={'backgroundColor': '#4BB274', 'border': 'none'}
                     ),
             ]
             ),
             
-            html.Div(className="country-filter-selecter-dropdown-two-box",
+            html.Div(className="filters-dropdown-order-selecter-box",
             children=[            
                 dcc.Dropdown(
                         id='country-order-selector',
-                        className= "country-filter-selecter-dropdown",
+                        className= "filters-dropdown-selector",
                         options=[
                             {'label': 'Crescent', 'value': 'crescent'},
                             {'label': 'Decrescent', 'value': 'decrescent'},
                         ],
                         value='crescent',
                         placeholder="Order",
+                        style={'backgroundColor': '#4BB274', 'border': 'none'}
                     ),
             ]
             ),
         ],
     ),
-    html.Div( className = "country-slider-wrapper",
+    html.Div( className = "filters-slider-wrapper",
         children = [
         
-        html.H1("Time Analysis", className="country-slider-header"),
+        #html.H1("Time Analysis", className="filters-slider-header"),
         
-        html.Button('Start', id='start-button', n_clicks=0, style={'width': '100px', 'height': '30px', 'background-color': '#EF80A2'}),
         dcc.Interval(id='country-auto-stepper', interval=1*1000, disabled=True),  # Desabilitado inicialmente
         
         dcc.Slider(
             id='country-year-slider',
+            className = "filters-year-slider",
             min=2000,
             max=df['year'].max(),
             value=df['year'].min(),
             marks={str(year): str(year) for year in df['year'].unique()},
             step=None
         ),
+        
+        html.Button('Animation', id='start-button', className= "filters-animation-button", n_clicks=0),
          
         ],
     ),
@@ -157,23 +162,26 @@ layout = html.Div(children=[
             html.Div(className = "country-ranking-container",children=[ 
                 dash_table.DataTable(
                     columns=[{'name': 'Country', 'id': 'country'}, 
-                             {'name': 'Loss Percentage', 'id': 'loss_percentage','type': 'numeric', 'format': percentage_format}, 
+                             {'name': 'Waste (%)', 'id': 'loss_percentage','type': 'numeric', 'format': percentage_format}, 
                              {'name': 'World Ranking', 'id': 'rank'}],
                     data=united_states_leaderboard_df.to_dict("records"),
                     id= "leaderboard-datatable",
+                    style_cell = {"fontFamily":"Hepta Slab Regular, sans-serif","background-color":"#fff9fb","fontSize":18,"textAlign":"center"},
+                    style_header = {"fontFamily":"Hepta Slab Bold, sans-serif","background-color":"#fff9fb","fontSize":18,"height":"auto","textAlign":"center"}
+                    
                 ),
-            ], style={'height': '15.5vw', 'width': '35vw', 'marginBottom': '7px'}),
+            ], style={'height': '100%', 'width': '100%', 'marginBottom': '10px'}),
             html.Div(className = "country-pieChart-container",children=[ 
                 dcc.Graph(id='country-pieChart', className='country-pieChart'),
-            ], style={'height': '15.5vw', 'width': '35vw', 'marginTop': '7px'}),
-        ],
+            ], style={'height': '100%', 'width': '100%', 'marginTop': '10px'}),
+        ] ,
     ) ,
-        html.Div(className = "country-barGraph-wrapper",
+        html.Div(className = "country-time-analysis-wrapper",
             children=[
-                html.Div(className = "country-product-barGraph-container",children=[ 
+                html.Div(className = "country-product-time-analysis-container",children=[ 
                     dcc.Graph(id='country-products-barGraph', className='country-products-barGraph'),
                 ]),
-                html.Div(className = "country-waste-barGraph-container",children=[ 
+                html.Div(className = "country-product-time-analysis-container",children=[ 
                     dcc.Graph(id='country-waste-barGraph', className='country-waste-barGraph'),
                 ]),
             ],
@@ -181,10 +189,10 @@ layout = html.Div(children=[
         ]  
     ),
     #Footer
-    # html.Div(className='landingpage-footer'),
-    # html.Div([
-    #     html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
-    # ],className="landingpage-footer-body"),       
+    html.Div(className='landingpage-footer'),
+    html.Div([
+        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    ],className="landingpage-footer-body"),       
 ])
 
 
@@ -330,7 +338,9 @@ def update_leaderboard(country,year,top,crescent):
     else:
         title = "Lowest "+aux + country 
     fig.update_layout(
-    title=title
+        title=title,
+        plot_bgcolor='#fff9fb',  # Transparent plotting area background
+        paper_bgcolor='#fff9fb'      # Light blue background for the entire figure
     )
     return fig
    

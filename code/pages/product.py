@@ -16,7 +16,7 @@ percentage_format = FormatTemplate.percentage(2)
 
 dash.register_page(__name__, path='/product') 
 
-option = 0
+option = 1
 if option == 1:
     df = pd.read_csv("/Users/joaopino/1.Principal/2Semester/VAD/Project/datasets/dataset.csv")
 else:
@@ -67,6 +67,7 @@ layout = html.Div(children=[
                         options=[{'label': product, 'value': product} for product in df["product"].dropna().unique()],
                         value='Potatoes',
                         clearable=False,
+                        style={'backgroundColor': '#FAD5E0', 'border': 'none',"fontFamily":"Hepta Slab Bold, sans-serif" ,"fontSize": 15,"textAlign":"center"  }
                     ),
             ]
             ),
@@ -83,6 +84,7 @@ layout = html.Div(children=[
                         ],
                         value=5,
                         placeholder="Order",
+                        style={'backgroundColor': '#4BB274', 'border': 'none',"fontFamily":"Hepta Slab Bold, sans-serif" ,"fontSize": 15,"textAlign":"center" }
                     ),
             ]
             ),
@@ -98,6 +100,7 @@ layout = html.Div(children=[
                         ],
                         value='crescent',
                         placeholder="Order",
+                        style={'backgroundColor': '#4BB274', 'border': 'none',"fontFamily":"Hepta Slab Bold, sans-serif" ,"fontSize": 15,"textAlign":"center"  }
                     ),
             ]
             ),
@@ -132,7 +135,7 @@ layout = html.Div(children=[
                 ], style={'height': '15.5vw', 'width': '35vw', 'marginBottom': '7px'}),
                 html.Div(className = "product-pieChart-container",children=[ 
                     dcc.Graph(id='product-pieChart', className='product-pieChart'),
-                ], style={'height': '15.5vw', 'width': '35vw', 'marginBottom': '7px'}),
+                ], style={'height': '100%', 'width': '100%', 'marginBottom': '7px'}),
             ],
         ) ,
         html.Div(className = "product-time-analysis-wrapper",
@@ -150,10 +153,10 @@ layout = html.Div(children=[
     
     
     # #Footer
-    # html.Div(className='landingpage-footer'),
-    # html.Div([
-    #     html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
-    # ],className="landingpage-footer-body"),       
+    html.Div(className='landingpage-footer'),
+    html.Div([
+        html.B("Project organized by João Pino and Miguel Sérgio for “Advanced Data Analysis”class in Universidade de Coimbra"),
+    ],className="landingpage-footer-body"),       
 ])
 
 def generate_production_dataframe_by_product(df, product):
@@ -268,7 +271,8 @@ def update_leaderboard(product,year,top,crescent):
     fig = px.pie(top_df,
                  values = top_df['loss_percentage'],
                  names = top_df['food_supply_stage'], 
-                 hole=.3)
+                 hole=.3
+    )
     aux = "food loss in the chains of "
     if(crescent == "crescent"):
         title = "Biggest "+aux + product
@@ -277,6 +281,12 @@ def update_leaderboard(product,year,top,crescent):
     fig.update_layout(
     title=title
     )
+    fig.update_layout(
+        title=title,
+        plot_bgcolor='#fff9fb',  # Transparent plotting area background
+        paper_bgcolor='#fff9fb'      # Light blue background for the entire figure
+    )
+    
     return fig
 
 def get_top_countries_by_product(df, product, year, top, crescent):
